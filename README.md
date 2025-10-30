@@ -48,35 +48,6 @@ ChainGuard AI is an autonomous AI-powered smart contract security platform that 
 - MetaMask wallet
 - Polygon network access
 
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/your-org/chainguard-ai
-cd chainguard-ai
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env
-# Add your Supabase credentials to .env
-
-# Run development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-### Environment Variables
-
-Create a `.env` file with:
-
-```env
-VITE_SUPABASE_URL=your_supabase_project_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
 
 ## Usage
 
@@ -156,43 +127,7 @@ Topics covered:
 - Competitive advantages
 - Future roadmap
 
-## Development
-
-### Project Structure
-
-```
-chainguard-ai/
-├── src/
-│   ├── components/       # Reusable UI components
-│   │   └── Navbar.tsx
-│   ├── context/          # React context providers
-│   │   └── AuthContext.tsx
-│   ├── lib/              # Utilities and services
-│   │   ├── supabase.ts
-│   │   ├── web3.ts
-│   │   └── vulnerabilityDetector.ts
-│   ├── pages/            # Main application pages
-│   │   ├── LandingPage.tsx
-│   │   ├── AuthPage.tsx
-│   │   ├── DashboardPage.tsx
-│   │   ├── ScannerPage.tsx
-│   │   └── WalletPage.tsx
-│   ├── App.tsx           # Main application component
-│   └── main.tsx          # Application entry point
-├── public/               # Static assets
-└── supabase/            # Database migrations (future)
-```
-
-### Available Scripts
-
-```bash
-npm run dev        # Start development server
-npm run build      # Build for production
-npm run preview    # Preview production build
-npm run lint       # Run ESLint
-npm run typecheck  # Run TypeScript checks
-```
-
+ 
 ## Security
 
 ### Data Protection
@@ -249,16 +184,9 @@ We welcome contributions! Please follow these steps:
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
-
-- Built with [React](https://react.dev/)
-- Powered by [Supabase](https://supabase.com/)
-- Deployed on [Polygon](https://polygon.technology/)
-- UI components from [Tailwind CSS](https://tailwindcss.com/)
-- Icons from [Lucide](https://lucide.dev/)
+ 
 
 ---
 
 **Built with ❤️ for the Polygon community**
-
-*Making smart contract security accessible to everyone*
+ 
