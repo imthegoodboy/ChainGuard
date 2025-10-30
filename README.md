@@ -173,12 +173,7 @@ We welcome contributions! Please follow these steps:
 - [ ] CI/CD integration
 - [ ] DAO governance token
 
-## Support
 
-- **Documentation:** [View Docs](./CHAINGUARD_AI_DOCUMENTATION.md)
-- **Email:** support@chainguard.ai
-- **Discord:** [Join Community](#)
-- **Twitter:** [@ChainGuardAI](#)
 
 ## License
 
