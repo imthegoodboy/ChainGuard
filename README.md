@@ -3,7 +3,6 @@
 > AI-Powered Smart Contract Security Guardian built on Polygon
 
 ![ChainGuard AI](https://img.shields.io/badge/Built%20on-Polygon-8247E5?style=for-the-badge&logo=polygon)
-![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
 ## Overview
 
