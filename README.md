@@ -172,7 +172,10 @@ We welcome contributions! Please follow these steps:
 - [ ] CI/CD integration
 - [ ] DAO governance token
 
+## WaveHack Feature Updates
 
+- Added a global light/dark theme toggle in the navigation bar, with preference persisted using local storage and Tailwind CSS `dark` mode for a more polished UI.
+- Enhanced the Smart Contract Scanner page with a **Download JSON** action so users can export detailed vulnerability reports for audits and documentation.
 
 ## License
 

@@ -1,13 +1,15 @@
-import { Shield, Menu, X } from 'lucide-react';
+import { Shield, Menu, X, SunMedium, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 type NavbarProps = {
   currentPage: string;
   onNavigate: (page: string) => void;
+  theme: 'light' | 'dark';
+  onToggleTheme: () => void;
 };
 
-export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
+export const Navbar = ({ currentPage, onNavigate, theme, onToggleTheme }: NavbarProps) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, profile, signOut } = useAuth();
 
@@ -21,7 +23,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
     : [{ label: 'Home', value: 'home' }];
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <nav className="bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-gray-200 dark:border-slate-800 sticky top-0 z-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div
@@ -44,12 +46,23 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
                 className={`text-sm font-medium transition-colors ${
                   currentPage === item.value
                     ? 'text-blue-600'
-                    : 'text-gray-700 hover:text-blue-600'
+                    : 'text-gray-700 hover:text-blue-600 dark:text-slate-200 dark:hover:text-blue-400'
                 }`}
               >
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={onToggleTheme}
+              aria-label="Toggle color theme"
+              className="p-2 rounded-full border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              {theme === 'light' ? (
+                <Moon className="w-4 h-4 text-gray-700" />
+              ) : (
+                <SunMedium className="w-4 h-4 text-yellow-300" />
+              )}
+            </button>
             {user ? (
               <div className="flex items-center space-x-4">
                 {profile && (
@@ -84,7 +97,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
       </div>
 
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+        <div className="md:hidden bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800">
           <div className="px-4 py-4 space-y-3">
             {navItems.map((item) => (
               <button
@@ -108,7 +121,7 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
                   signOut();
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50"
+                className="block w-full text-left px-4 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-800"
               >
                 Sign Out
               </button>
@@ -123,6 +136,22 @@ export const Navbar = ({ currentPage, onNavigate }: NavbarProps) => {
                 Get Started
               </button>
             )}
+            <div className="pt-3 border-t border-gray-100 dark:border-slate-800 flex items-center justify-between px-1">
+              <span className="text-xs text-gray-500 dark:text-slate-400">Theme</span>
+              <button
+                onClick={() => {
+                  onToggleTheme();
+                }}
+                aria-label="Toggle color theme"
+                className="p-2 rounded-full border border-gray-200 dark:border-slate-700 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                {theme === 'light' ? (
+                  <Moon className="w-4 h-4 text-gray-700" />
+                ) : (
+                  <SunMedium className="w-4 h-4 text-yellow-300" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

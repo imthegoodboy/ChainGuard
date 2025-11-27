@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Upload, Github, FileCode, Shield, AlertTriangle, CheckCircle, Loader, AlertCircle } from 'lucide-react';
+import { Upload, Github, FileCode, Shield, AlertTriangle, CheckCircle, Loader, AlertCircle, Download } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { supabase } from '../lib/supabase';
 import { analyzeContract, fetchGitHubContract, Vulnerability } from '../lib/vulnerabilityDetector';
@@ -21,6 +21,31 @@ export const ScannerPage = ({ onNavigate }: ScannerPageProps) => {
     scanDuration: number;
   } | null>(null);
   const [error, setError] = useState('');
+
+  const handleDownloadReport = () => {
+    if (!scanResult) return;
+
+    const contractLabel =
+      contractName ||
+      (scanType === 'github' ? githubUrl.split('/').pop()?.replace('.sol', '') || 'contract' : 'contract');
+
+    const data = {
+      contractName: contractLabel,
+      scannedAt: new Date().toISOString(),
+      scanType,
+      ...scanResult,
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${contractLabel}-security-report.json`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
 
   const canScan = () => {
     if (!user || !profile) return false;
@@ -304,11 +329,21 @@ export const ScannerPage = ({ onNavigate }: ScannerPageProps) => {
             <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-900">Scan Results</h2>
-                <div className="text-right">
-                  <div className={`text-4xl font-bold ${getRiskColor(scanResult.riskScore)}`}>
-                    {scanResult.riskScore}
+                <div className="flex items-center space-x-4">
+                  <button
+                    type="button"
+                    onClick={handleDownloadReport}
+                    className="inline-flex items-center space-x-2 px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Download className="w-4 h-4" />
+                    <span>Download JSON</span>
+                  </button>
+                  <div className="text-right">
+                    <div className={`text-4xl font-bold ${getRiskColor(scanResult.riskScore)}">
+                      {scanResult.riskScore}
+                    </div>
+                    <div className="text-sm text-gray-500">Risk Score</div>
                   </div>
-                  <div className="text-sm text-gray-500">Risk Score</div>
                 </div>
               </div>
 
