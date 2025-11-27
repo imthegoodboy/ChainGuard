@@ -21,6 +21,14 @@ export const ScannerPage = ({ onNavigate }: ScannerPageProps) => {
     scanDuration: number;
   } | null>(null);
   const [error, setError] = useState('');
+  const [severityFilter, setSeverityFilter] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all');
+
+  const filteredVulnerabilities =
+    scanResult && scanResult.vulnerabilities
+      ? severityFilter === 'all'
+        ? scanResult.vulnerabilities
+        : scanResult.vulnerabilities.filter((v) => v.severity === severityFilter)
+      : [];
 
   const handleDownloadReport = () => {
     if (!scanResult) return;
@@ -339,7 +347,7 @@ export const ScannerPage = ({ onNavigate }: ScannerPageProps) => {
                     <span>Download JSON</span>
                   </button>
                   <div className="text-right">
-                    <div className={`text-4xl font-bold ${getRiskColor(scanResult.riskScore)}">
+                    <div className={`text-4xl font-bold ${getRiskColor(scanResult.riskScore)}`}>
                       {scanResult.riskScore}
                     </div>
                     <div className="text-sm text-gray-500">Risk Score</div>
@@ -376,36 +384,63 @@ export const ScannerPage = ({ onNavigate }: ScannerPageProps) => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <h3 className="text-lg font-bold text-gray-900 mb-4">Vulnerabilities Detected</h3>
-                  {scanResult.vulnerabilities.map((vuln, index) => (
-                    <div
-                      key={index}
-                      className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center space-x-3">
-                          <AlertTriangle className="w-5 h-5 text-orange-600" />
-                          <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${getSeverityColor(vuln.severity)}`}>
-                            {vuln.severity.toUpperCase()}
-                          </span>
-                          <span className="text-sm font-medium text-gray-700">{vuln.category}</span>
-                        </div>
-                        <span className="text-xs text-gray-500">{vuln.location}</span>
-                      </div>
-                      <p className="text-gray-700 mb-3">{vuln.description}</p>
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-sm font-medium text-blue-900 mb-1">Recommendation:</p>
-                        <p className="text-sm text-blue-800">{vuln.recommendation}</p>
-                      </div>
-                      {vuln.codeSnippet && (
-                        <div className="mt-3">
-                          <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-xs overflow-x-auto">
-                            <code>{vuln.codeSnippet}</code>
-                          </pre>
-                        </div>
-                      )}
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
+                    <h3 className="text-lg font-bold text-gray-900">Vulnerabilities Detected</h3>
+                    <div className="inline-flex rounded-lg border border-gray-200 bg-gray-50 text-xs font-medium text-gray-600 overflow-hidden">
+                      {(['all', 'critical', 'high', 'medium', 'low'] as const).map((level) => (
+                        <button
+                          key={level}
+                          type="button"
+                          onClick={() => setSeverityFilter(level)}
+                          className={`px-3 py-1 border-l border-gray-200 first:border-l-0 transition-colors ${
+                            severityFilter === level
+                              ? 'bg-white text-blue-600'
+                              : 'hover:bg-gray-100'
+                          }`}
+                        >
+                          {level === 'all'
+                            ? 'All'
+                            : level.charAt(0).toUpperCase() + level.slice(1)}
+                        </button>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+
+                  {filteredVulnerabilities.length === 0 ? (
+                    <p className="text-sm text-gray-500">
+                      No vulnerabilities found for this severity filter.
+                    </p>
+                  ) : (
+                    filteredVulnerabilities.map((vuln, index) => (
+                      <div
+                        key={index}
+                        className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center space-x-3">
+                            <AlertTriangle className="w-5 h-5 text-orange-600" />
+                            <span className={`text-xs font-semibold px-3 py-1 rounded-full border ${getSeverityColor(vuln.severity)}`}>
+                              {vuln.severity.toUpperCase()}
+                            </span>
+                            <span className="text-sm font-medium text-gray-700">{vuln.category}</span>
+                          </div>
+                          <span className="text-xs text-gray-500">{vuln.location}</span>
+                        </div>
+                        <p className="text-gray-700 mb-3">{vuln.description}</p>
+                        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                          <p className="text-sm font-medium text-blue-900 mb-1">Recommendation:</p>
+                          <p className="text-sm text-blue-800">{vuln.recommendation}</p>
+                        </div>
+                        {vuln.codeSnippet && (
+                          <div className="mt-3">
+                            <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg text-xs overflow-x-auto">
+                              <code>{vuln.codeSnippet}</code>
+                            </pre>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
                 </div>
               )}
             </div>
